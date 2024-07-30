@@ -1,0 +1,14 @@
+{
+  "name": "iotrestapi",
+  "version": "1.0.0",
+  "description": "A REST API used by the ESP8266 to send data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
