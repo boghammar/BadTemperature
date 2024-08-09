@@ -1,6 +1,6 @@
 # IOTRestAPI
 Api and frontend for displaying measurements.
-Based on express
+Based on express and Firebase
 
 ## References
 
