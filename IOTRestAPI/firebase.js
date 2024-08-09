@@ -1,4 +1,5 @@
-const firebase = require('firebase/app');
+const { initializeApp } = require('firebase/app');
+const { getDatabase } = require('firebase/database');
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 const firebaseConfig = {
     apiKey: process.env.APIKEY,
@@ -11,10 +12,10 @@ const firebaseConfig = {
   };
   
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 
 // Initialize Realtime Database and get a reference to the service
-const database = firebase.database(); //app.getDatabase(app);
+const database = getDatabase(); //app.getDatabase(app);
 
 module.exports = database;
