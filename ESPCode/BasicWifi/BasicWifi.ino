@@ -4,11 +4,20 @@
 #include <Arduino_JSON.h>
 #include <PubSubClient.h>
 
-const char* ssid = "fullrulle";
-const char* password = "0123456789";
+//#define LANDET
+
+#ifdef LANDET
+  const char* ssid = "fullrulle";
+  const char* password = "0123456789";
+  String serverURL = "http://192.168.2.90:3001";
+#else
+  const char* ssid = "Connecting …"; // "Ompabompa"; //
+  const char* password = "0123456789"; // "Bonnie23"; //
+  String serverURL = "http://192.168.1.91:3001";
+#endif
+
 const char* mqtt_server = "test.mosquitto.org"; //"broker.mqtt-dashboard.com";
 
-String serverURL = "http://192.168.2.90:3000";
 
 unsigned long previousBlink = 0;
 const long blinkIntervall = 4000; 
@@ -96,7 +105,8 @@ void loop() {
     WiFi.mode(WIFI_STA);
     WiFiMulti.addAP(ssid, password);
     //WiFi.begin(ssid, password);
-    Serial.println("Connecting");
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
     while (WiFiMulti.run(connectTimeoutMs) != WL_CONNECTED) {
     //while(WiFi.status() != WL_CONNECTED) { 
       Serial.printf(".%d",WiFi.status());
@@ -114,7 +124,7 @@ void loop() {
 // ---------------------------------------------------------------------------------
 void PostSignal() {
     HTTPClient http;
-    String serverpath = serverURL + "/signal";
+    String serverpath = serverURL + "/api/signal";
     Serial.printf("Doing a post for %s\r\n", serverpath.c_str());
     http.begin(wifiClient, serverpath.c_str());
     http.addHeader("Content-Type", "application/json");
@@ -148,7 +158,7 @@ void PostSignal() {
 // ---------------------------------------------------------------------------------
 void GetStatus() {
       HTTPClient http;
-      String serverpath = serverURL + "/status";
+      String serverpath = serverURL + "/api/status";
       Serial.printf("Doing a get for %s\r\n", serverpath.c_str());
       http.begin(wifiClient, serverpath.c_str());
 

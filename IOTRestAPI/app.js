@@ -11,15 +11,19 @@ References:
 // 
 
 const express = require('express');
-const app = express();
+const path = require('path');
 const config = require('./config');
+
+const app = express();
 const PORT = process.env.PORT || 3000
 
 const database = require('./firebase');
 const routes = require('./routes');
 
 app.set('view engine', 'pug')
-app.use(express.static('public'))
+//app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 app.use('/api', routes);
 
 app.listen(PORT, '0.0.0.0', () => {

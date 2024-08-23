@@ -19,7 +19,7 @@ router.get('/status', (request, response) => {
 
 router.post('/signal', (request, response) => {
     console.log(formatTime() + ": /signal called by ", request.ip, " payload:", request.body);
-    response.json({'Status': 'ok'});
+    response.json({'Signal reveived': 'ok'});
 });
 
 /*router.put('/users/:id', (req, res) => {

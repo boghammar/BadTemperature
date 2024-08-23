@@ -1,6 +1,5 @@
-html
-  include includes/head.pug
-    title= title
-  body
+extends layout.pug
+
+block scripts 
+block content
     h1= message
-    include includes/footer.pug
