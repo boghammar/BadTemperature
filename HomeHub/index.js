@@ -36,16 +36,46 @@ app.get('/device', async (request, response) => {
   var what = request.query.operation;
   var id = request.query.id;
   switch (what) {
-    case "status": {
+      // ----------------------------- Status
+      case "status": {
       try {
-      var ret = await deviceMap[id].getStatus();
-      debug("Status: " + ret);
-      response.send(ret); 
+        var ret = await deviceMap[id].getStatus();
+        debug("Status: " + ret);
+        response.send(ret);
       } catch (error) {
         response.status(500).send("Error getting device status: " + error);
       }
-      break
-    }
+      break;}
+      break;
+      // ----------------------------- Refresh
+      case "refresh": {
+      try {
+        /** TODO this has to be written, just a copy right now */
+        var ret = await deviceMap[id].getStatus();
+        debug("Status: " + ret);
+        response.send(ret);
+      } catch (error) {
+        response.status(500).send("Error getting device status: " + error);
+      }
+      break;}
+
+      // ----------------------------- turnon
+      case "turnon": {
+      try {
+        var turnon = request.query.turnon;
+
+        var ret = await deviceMap[id].turnOn(turnon);
+        debug("Turnon: " + JSON.stringify(ret));
+        ret.power = deviceMap[id].power;
+        ret.rssi = deviceMap[id].rssi;
+        ret.ip = deviceMap[id].ip;
+        debug("Turnon: " + deviceMap[id].toString());
+        debug("Turnon: " + JSON.stringify(ret));
+        response.send(ret);
+      } catch (error) {
+        response.status(500).send("Error turning device on: " + error);
+      }
+      break;}
     default: response.send("Unknown operation '" + what + "'");
   }
 });
@@ -87,7 +117,9 @@ app.get('/', (request, response) => {
 // -------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------
 function getListOfDevices() {
-  return JSON.stringify(devices);
+  var ret = JSON.stringify(devices);
+  debug(ret);
+  return ret;
 }
 // -------------------------------------------------------------------------------------
 //                   Utilities
