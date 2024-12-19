@@ -9,9 +9,10 @@ const PORT = process.env.PORT || 8080
 
 const devices = {
   "Devices": [
-    new device("1", "Julgran", "Shelly", "192.168.20.150"),
-    new device("2", "Slingor", "Shelly", "192.168.20.151"),
-    new device("3", "Slingorute", "Shelly", "192.168.20.152")
+    new device("1", "Julgran", "Shelly", "192.168.20.150")
+    , new device("2", "Slingor", "Shelly", "192.168.20.151")
+    , new device("3", "Slingorute", "Shelly", "192.168.20.152")
+    , new device("4", "????????", "Shelly", "192.168.20.153")
   ]}
 
 const deviceMap = devices.Devices.reduce((map, device) => {
@@ -56,6 +57,16 @@ app.get('/device', async (request, response) => {
         response.send(ret);
       } catch (error) {
         response.status(500).send("Error getting device status: " + error);
+      }
+      break;}
+
+      // ----------------------------- Powerstate
+      case "getPowerState": {
+      try {
+        var ret = await deviceMap[id].getPowerState();
+        response.send(ret);
+      } catch (error) {
+        response.status(500).send("Error getting device powerstate: " + error);
       }
       break;}
 

@@ -4,23 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Node</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/pico.min.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header>
-    <h1>Home Hub</h1> running on <span id="hostname"></span>
+    <h1>Home Hub</h1>
     <nav>
       <!-- navigation links will go here -->
     </nav>
   </header>
-  <main>
+  <main class="container">
     <!-- main content will go here -->
-     <button id="getDevices" onclick="getInfo('/device?what=refresh', 'devices', formatDevices)">Refresh</button>
      <div id="devices"></div>
   </main>
-  <footer>
+  <footer class="container"><small>
     <!-- footer content will go here -->
+     <div class="grid">
+      <div>Running on <span id="hostname"></span></div>
+      <div>Copyright &copy; boghammar.com 2024</div>
+       <div>Version 1.0.0</div>
+       <div>Powered by Node.js</div>
+    </div></small>
   </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -72,7 +72,12 @@ function deviceSet(id, turnon) {
                     document.getElementById('devbtn_'+id).className = 'btn btn-on';
                     document.getElementById('devbtn_'+id).onclick = function () {deviceSet(id,false);};
                 }
-                document.getElementById('devstatus_'+id).innerHTML = ret.power + ' w ' + ret.rssi + 'db ' + ret.ip;
+                /* Obtain power state after 5secs */
+                setTimeout(async function() {
+                  const resp = await fetch('/device?operation=getPowerState&id=' + id);
+                  const data = await resp.json();
+                  document.getElementById('devstatus_'+id).innerHTML = data.power + ' w ' + data.rssi + 'db ' + data.ip;
+                }, 2000);
             } else {
             /** TODO error handling */
             }

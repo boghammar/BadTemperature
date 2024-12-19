@@ -46,6 +46,7 @@ class Device {
       console.log(data);
       this.output = data.output;
       this.power = data.apower;
+      return this;
     } catch (error) {
       console.error('Error:', error);
     }
