@@ -136,6 +136,6 @@ function getListOfDevices() {
 //                   Utilities
 // -------------------------------------------------------------------------------------
 //
-function debug(message) {
-  console.log(`${new Date().toLocaleTimeString()} - ${message}`);
+function debug(...message) {
+  console.log(`${new Date().toLocaleTimeString()} - `,...message);
 }
