@@ -1,19 +1,45 @@
 const express = require('express');
 const device = require('./device');
+const ShellyDevice = require('./ShellyDevice');
+
 const path = require('path');
 const os = require('os');
 const { get } = require('http');
+const ShellyDevice = require('./ShellyDevice');
 
 const app = express();
 const PORT = process.env.PORT || 8080
 
-const devices = {
-  "Devices": [
-    new device("1", "Julgran", "Shelly", "192.168.20.150")
-    , new device("2", "Slingor", "Shelly", "192.168.20.151")
-    , new device("3", "Slingorute", "Shelly", "192.168.20.152")
-    , new device("4", "????????", "Shelly", "192.168.20.153")
-  ]}
+const deviceConfig =
+  [  
+    { "type": "Shelly", "ip": "192.168.20.150"}
+    ,{ "type": "Shelly", "ip": "192.168.20.151"}
+    ,{ "type": "Shelly", "ip": "192.168.20.152"}
+    ,{ "type": "Shelly", "ip": "192.168.20.153"}
+    ,{ "type": "Shelly", "ip": "192.168.20.154"}
+    ,{ "type": "Shelly", "ip": "192.168.20.155"}
+    ,{ "type": "Wiz", "ip": "192.168.20.160"}
+  ];
+
+
+const devices = {};
+
+deviceConfig.forEach((deviceCfg, index) => {
+  let device;
+
+  switch (deviceCfg.type) {
+    case "Shelly":
+      device = new ShellyDevice(index, deviceCfg.name,  deviceCfg.ip);
+      break;
+    case "Wiz":
+      device = new Device(deviceCfg.id, deviceCfg.name, deviceCfg.type, deviceCfg.ip);
+      break;
+    default:
+      throw new Error(`Unknown device type: ${deviceCfg.type}`);
+      break;
+  }
+  devices[index] = device;
+});
 
 const deviceMap = devices.Devices.reduce((map, device) => {
   map[device.id] = device;

@@ -12,62 +12,17 @@ class Device {
     this.getStatus();
   }
 
-  // -------------------------------------------------------------------------------------
   async getStatus() {
-    try {
-      var url = 'http://' + this.ip + '/rpc/Shelly.Getstatus';
-      console.log('device.getStatus: ' + url);
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      this.ssid = data.wifi.ssid;
-      this.rssi = data.wifi.rssi;
-
-      url = 'http://' + this.ip + '/rpc/switch.Getconfig?id=0';
-      console.log('device.getStatus: ' + url);
-      const response2 = await fetch(url);
-      const data2 = await response2.json();
-      console.log(data2);
-      this.name = data2.name;
-
-      await this.getPowerState();
-      return data;
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    throw new Error('Method not implemented');
   }
-  // -------------------------------------------------------------------------------------
+
   async getPowerState() {
-    try {
-      var url = 'http://' + this.ip + '/rpc/switch.getstatus?id=0';
-      console.log('device.getPowerState: ' + url);
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      this.output = data.output;
-      this.power = data.apower;
-      return this;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-  // -------------------------------------------------------------------------------------
-  async turnOn(turnon) {
-    try {
-      var url = 'http://' + this.ip + '/rpc/switch.Set?id=0&on=' + turnon;
-      console.log('device.turnon: ' + url);
-      const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      await this.getPowerState();
-      //this.output = Boolean(turnon); // update internal state
-      console.log('device.turnon: ' + this.toString());
-      return data;
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    throw new Error('Method not implemented');
   }
 
+  async turnOn(turnOn) {
+    throw new Error('Method not implemented');
+  }
   // -------------------------------------------------------------------------------------
   toJson() {
     return {
