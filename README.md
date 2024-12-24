@@ -8,6 +8,14 @@ IOT project based on ESP8266 and ds18b20
 * IOTRestAPI - A NodeJS Express app that exposes an API for devices to report data to
 * testWiz - Just a demo of handling Wiz devices
 
- ## References
+## References
 
 - Solardriven power:
+- 
+### Device API's
+* WIZ implementations
+  * ..
+  * ..
+* Shelly implementations:
+  * ..
+  * 
