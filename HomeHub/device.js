@@ -20,6 +20,12 @@ class Device {
     throw new Error('Method not implemented');
   }
 
+  /** Turn the device on
+   * 
+   * @param {boolean} turnOn
+   * 
+   * @returns {Promise<void>} {"success": boolean, "message": string}
+   */
   async turnOn(turnOn) {
     throw new Error('Method not implemented');
   }

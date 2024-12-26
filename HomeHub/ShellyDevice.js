@@ -51,16 +51,20 @@ class ShellyDevice extends Device {
   async turnOn(turnon) {
     try {
       var url = 'http://' + this.ip + '/rpc/switch.Set?id=0&on=' + turnon;
-      console.log('device.turnon: ' + url);
+      console.log('shelly.turnon: ' + url);
       const response = await fetch(url);
       const data = await response.json();
       console.log(data);
       await this.getPowerState();
-      //this.output = Boolean(turnon); // update internal state
-      console.log('device.turnon: ' + this.toString());
-      return data;
+      console.log('shelly.turnon: ' + this.toString());
+      let ret = {"success": true, "message": data};
+      if (data.code !== undefined) {
+        ret.success = false;
+      }
+      return ret;
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Shelly.turnon Error:', error);
+      return {"success": false, "error": error};
     }
   }
 

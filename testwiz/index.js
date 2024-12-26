@@ -6,7 +6,7 @@ const os = require('os');
 
 const DEVICE_UDP_LISTEN_PORT = 38900;
 const LIGHT_UDP_CONTROL_PORT = 38899;
-const IPOFDEVICE = '192.168.20.40'; //90';
+const IPOFDEVICE = '192.168.2.10'; //0.40'; //90';
 
 const readline = require('readline');
 const dgram = require('dgram');

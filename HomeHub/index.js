@@ -1,28 +1,32 @@
 const express = require('express');
 const device = require('./device');
 const ShellyDevice = require('./ShellyDevice');
+const WizDevice = require('./WizDevice');
 
 const path = require('path');
 const os = require('os');
 const { get } = require('http');
-const ShellyDevice = require('./ShellyDevice');
 
 const app = express();
 const PORT = process.env.PORT || 8080
 
 const deviceConfig =
   [  
-    { "type": "Shelly", "ip": "192.168.20.150"}
-    ,{ "type": "Shelly", "ip": "192.168.20.151"}
-    ,{ "type": "Shelly", "ip": "192.168.20.152"}
-    ,{ "type": "Shelly", "ip": "192.168.20.153"}
-    ,{ "type": "Shelly", "ip": "192.168.20.154"}
-    ,{ "type": "Shelly", "ip": "192.168.20.155"}
-    ,{ "type": "Wiz", "ip": "192.168.20.160"}
+    { "type": "Wiz", "ip": "192.168.2.10"}
+    ,{ "type": "Wiz", "ip": "192.168.2.11"}
+    ,{ "type": "Wiz", "ip": "192.168.2.12"}
+    ,{ "type": "Shelly", "ip": "192.168.2.20"}
+    // { "type": "Shelly", "ip": "192.168.20.150"}
+    // ,{ "type": "Shelly", "ip": "192.168.20.151"}
+    // ,{ "type": "Shelly", "ip": "192.168.20.152"}
+    // ,{ "type": "Shelly", "ip": "192.168.20.153"}
+    // ,{ "type": "Shelly", "ip": "192.168.20.154"}
+    // ,{ "type": "Shelly", "ip": "192.168.20.155"}
+    // ,{ "type": "Wiz", "ip": "192.168.20.160"}
   ];
 
 
-const devices = {};
+const devices = [];
 
 deviceConfig.forEach((deviceCfg, index) => {
   let device;
@@ -32,7 +36,7 @@ deviceConfig.forEach((deviceCfg, index) => {
       device = new ShellyDevice(index, deviceCfg.name,  deviceCfg.ip);
       break;
     case "Wiz":
-      device = new Device(deviceCfg.id, deviceCfg.name, deviceCfg.type, deviceCfg.ip);
+      device = new WizDevice(index, deviceCfg.name, deviceCfg.ip);
       break;
     default:
       throw new Error(`Unknown device type: ${deviceCfg.type}`);
@@ -41,7 +45,7 @@ deviceConfig.forEach((deviceCfg, index) => {
   devices[index] = device;
 });
 
-const deviceMap = devices.Devices.reduce((map, device) => {
+const deviceMap = devices.reduce((map, device) => {
   map[device.id] = device;
   return map;
 }, {});
@@ -102,12 +106,9 @@ app.get('/device', async (request, response) => {
         var turnon = request.query.turnon;
 
         var ret = await deviceMap[id].turnOn(turnon);
-        debug("Turnon: " + JSON.stringify(ret));
-        ret.power = deviceMap[id].power;
-        ret.rssi = deviceMap[id].rssi;
-        ret.ip = deviceMap[id].ip;
-        debug("Turnon: " + deviceMap[id].toString());
-        debug("Turnon: " + JSON.stringify(ret));
+
+        debug("Turnon1: " + JSON.stringify(ret));
+        debug("Turnon2: " + deviceMap[id].toString());
         response.send(ret);
       } catch (error) {
         response.status(500).send("Error turning device on: " + error);
