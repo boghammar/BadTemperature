@@ -12,10 +12,10 @@ const PORT = process.env.PORT || 8080
 
 const deviceConfig =
   [  
-    { "type": "Wiz", "ip": "192.168.2.10"}
-    ,{ "type": "Wiz", "ip": "192.168.2.11"}
-    ,{ "type": "Wiz", "ip": "192.168.2.12"}
-    ,{ "type": "Shelly", "ip": "192.168.2.20"}
+    { "name" : "Snicken", "type": "Wiz", "ip": "192.168.2.10"}
+    ,{ "name" : "Middagsrum fönster", "type": "Wiz", "ip": "192.168.2.11"}
+    ,{ "name" : "Vardagsrum fönster", "type": "Wiz", "ip": "192.168.2.12"}
+    ,{ "name" : "Friggebod ute", "type": "Shelly", "ip": "192.168.2.20"}
     // { "type": "Shelly", "ip": "192.168.20.150"}
     // ,{ "type": "Shelly", "ip": "192.168.20.151"}
     // ,{ "type": "Shelly", "ip": "192.168.20.152"}
