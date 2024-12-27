@@ -66,6 +66,10 @@ function deviceSet(id, turnon) {
             if (ret.success !== undefined) {
                 if (!ret.success) {
                     document.getElementById('errormessage').innerHTML = 'Error: ' + ret.message + '<br>';
+                } else {
+                    let tt = turnon ? 'btn-on' : 'btn-off';
+                    document.getElementById('devbtn_'+id).className = 'btn '+tt;
+                    document.getElementById('devbtn_'+id).onclick = function () {deviceSet(id,!turnon);};
                 }
                 /* Obtain power state after 2secs */
                 setTimeout(async function() {
