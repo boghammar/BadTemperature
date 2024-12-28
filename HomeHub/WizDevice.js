@@ -18,29 +18,65 @@ class WizDevice extends Device {
     const sendSocket = dgram.createSocket('udp4');
     const message = {"method": "getPilot"};
     const msg = Buffer.from(JSON.stringify(message), 'utf8'); 
-    sendSocket.on('message', (msg, rinfo) => {
+    
+    return new Promise((resolve,reject) => {
+      sendSocket.on('message', (msg, rinfo) => {
         console.log(`Received message: ${msg} from ${rinfo.address}:${rinfo.port}`);
         let json = JSON.parse(msg.toString());
         this.rssi = json.result.rssi;
         this.output = json.result.state;
+        resolve(this);
       });
 
-    sendSocket.send(msg, 0, msg.length, LIGHT_UDP_CONTROL_PORT, this.ip, (error) => {
+      sendSocket.on('error', (err) => {
+        console.log(`Socket error: ${err}`);
+        reject(err);
+      });
+
+      sendSocket.send(msg, 0, msg.length, LIGHT_UDP_CONTROL_PORT, this.ip, (error) => {
         if (error) {
-            console.log(`Error sending message to ${this.ip}: ${error}`);
+          console.log(`Error sending message to ${this.ip}: ${error}`);
+          reject(error);
         } else {
             console.log(`Message sent to ${this.ip}:${LIGHT_UDP_CONTROL_PORT}: ${message}`);
         }
+      });
+
     });
   }
   // -------------------------------------------------------------------------------------
   async getPowerState() {
-    throw new Error('Method not implemented');
+    const sendSocket = dgram.createSocket('udp4');
+    const message = {"method": "getPower"};
+    const msg = Buffer.from(JSON.stringify(message), 'utf8'); 
+
+    return new Promise((resolve, reject) => {
+      sendSocket.on('message', (msg, rinfo) => {
+        console.log(`Received message: ${msg} from ${rinfo.address}:${rinfo.port}`);
+        let json = JSON.parse(msg.toString());
+        this.power = json.result.power / 1000;
+        resolve(this);
+      });
+
+      sendSocket.on('error', (err) => {
+        console.log(`Socket error ${this.ip}: ${err}`);
+        reject({"success": false, "message": err});
+      });
+
+      sendSocket.send(msg, 0, msg.length, LIGHT_UDP_CONTROL_PORT, this.ip, (error) => {
+        if (error) {
+            console.log(`Error sending message to ${this.ip}: ${error}`);
+            reject({"success": false, "message": error});
+        } else {
+            console.log(`Message sent to ${this.ip}:${LIGHT_UDP_CONTROL_PORT}: ${JSON.stringify(message)}`);
+        }
+      });
+    })
   }
   // -------------------------------------------------------------------------------------
   async turnOn(turnOn) {
     const sendSocket = dgram.createSocket('udp4');
-    const message = {"method": "setPilot", "params": {"state": turnOn === 'true' ? true : false}};
+    const message = {"method": "setPilot", "params": {"state": turnOn}};//{"method": "setPilot", "params": {"state": turnOn === 'true' ? true : false}};
     const msg = Buffer.from(JSON.stringify(message), 'utf8'); 
 
     return new Promise((resolve, reject) => {

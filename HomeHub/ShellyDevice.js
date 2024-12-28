@@ -14,10 +14,10 @@ class ShellyDevice extends Device {
       var url = 'http://' + this.ip + '/rpc/Shelly.Getstatus';
       console.log('device.getStatus: ' + url);
       const response = await fetch(url);
-      const data = await response.json();
-      console.log(data);
-      this.ssid = data.wifi.ssid;
-      this.rssi = data.wifi.rssi;
+      const data1 = await response.json();
+      console.log(data1);
+      this.ssid = data1.wifi.ssid;
+      this.rssi = data1.wifi.rssi;
 
       url = 'http://' + this.ip + '/rpc/switch.Getconfig?id=0';
       console.log('device.getStatus: ' + url);
@@ -27,7 +27,7 @@ class ShellyDevice extends Device {
       this.name = data2.name;
 
       await this.getPowerState();
-      return data;
+      return this;
     } catch (error) {
       console.error('Error:', error);
     }

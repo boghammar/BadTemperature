@@ -10,6 +10,7 @@ class Device {
     this.type = type;
     this.ip = ip;
     this.getStatus();
+    this.getPowerState();
   }
 
   async getStatus() {

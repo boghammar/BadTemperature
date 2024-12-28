@@ -45,7 +45,7 @@ function formatDevices(devices) {
 }
 // ----------------------------------------------- 
 function getDeviceStatus(id) {
-    fetch('/device?operation=status&id=' + id)
+    fetch('/api/device/'+id+'/status')
         .then(function (response) {
             return response.text();
         })
@@ -56,7 +56,8 @@ function getDeviceStatus(id) {
 }
 // ----------------------------------------------- 
 function deviceSet(id, turnon) {
-    fetch('/device?operation=turnon&id=' + id+'&turnon='+turnon)
+    let temp = turnon ? 'on' : 'off';
+    fetch('/api/device/'+id+'/'+temp)
         .then(function (response) {
             return response.text();
         })
@@ -73,10 +74,10 @@ function deviceSet(id, turnon) {
                 }
                 /* Obtain power state after 2secs */
                 setTimeout(async function() {
-                  const resp = await fetch('/device?operation=getPowerState&id=' + id);
+                  const resp = await fetch('/api/device/'+id+'/power');
                   const data = await resp.json();
                   document.getElementById('devstatus_'+id).innerHTML = data.power + ' w ' + data.rssi + 'db ' + data.ip;
-                }, 2000);
+                }, 5000);
             } else {
                 document.getElementById('errormessage').innerHTML = 'Error: ' + JSON.stringify(ret) +  '<br>';
             }
@@ -86,4 +87,5 @@ function deviceSet(id, turnon) {
 
 // ----------------------------------------------- Execute on load
 getInfo('/info?what=hostname', 'hostname');
+getInfo('/info?what=version', 'version');
 getInfo('/info?what=devices', 'devices', formatDevices);
