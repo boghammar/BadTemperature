@@ -1,4 +1,4 @@
-const MyModel = require('./Model');
+const MyModel = require('./model');
 const modelInstance = new MyModel();
 
 module.exports = { modelInstance };
