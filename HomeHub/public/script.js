@@ -27,18 +27,22 @@ function formatDevices(devices) {
         var turnon = true;
         if (devices[i].output) {btnclass = 'btn btn-on'; turnon = false;};
         devices[i] = 
-          '<div class="deviceCard">' 
-        + '<div class="deviceCardInner">'
-        + '  <div class="deviceRows">'
-        + '    <div>' + devices[i].name + ' ('+ devices[i].type +') </div>'
-        + '    <div id="devstatus_'+devices[i].id+'" class="deviceStatus">' + devices[i].power + ' w ' 
+          '' 
+        + '<div class="row deviceCard">'
+        + '  <div class="col-1 is-right"><span class="material-icons">lightbulb</span></div>'
+        + '  <div class="col-8">'
+        + '    <div class="row deviceName">' + devices[i].name + ' ('+ devices[i].type +') </div>'
+        + '    <div class="row deviceStatus" id="devstatus_'+devices[i].id+'" >' 
+        +        devices[i].power + ' w ' 
         +        devices[i].rssi + 'db '
         +        devices[i].ip + ' '
         + '    </div>'
         + '  </div>'
-        + '  <button class="'+ btnclass +'" id="devbtn_'+devices[i].id+'" onclick="deviceSet('+devices[i].id+','+turnon+')"></button>'
+        + '  <div class="col is-right">'
+        + '    <button class="'+ btnclass +'" id="devbtn_'+devices[i].id+'" onclick="deviceSet('+devices[i].id+','+turnon+')"><span class="material-icons">power_settings_new</span></button>'
+        + '  </div>'
         + '</div>'
-        + '</div>';
+        + '';
     }
     devices = devices.join('');
     return devices;

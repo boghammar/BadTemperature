@@ -4,30 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HomeHub</title>
-  <link rel="stylesheet" href="css/pico.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"> -->
+  <link rel="stylesheet" href="css/chota.css">
+  <!-- <link rel="stylesheet" href="css/milligram.css"> -->
+  <!-- <link rel="stylesheet" href="css/pico.min.css"> -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header>
-    <h1>Home Hub</h1>
     <nav>
       <!-- navigation links will go here -->
     </nav>
   </header>
   <main class="container">
+    <h1>Home Hub - <span class="material-icons">home</span></h1>
     <div class="errormessage"></div>
-    <!-- main content will go here -->
+    <!-- List of all devices -->
      <div id="devices"></div>
+    <!-- List of all actions -->
+    <div id="actions">
+        <h2>Actions - <span class="material-icons">settings</span></h2>
+        <div class="row actionCard">
+          <div class="col-1 is-right"><span class="material-icons">play_arrow</span></div>
+          <div class="col">Turn on all lights</div>
+          <div class="col-1 is-right"><span class="material-icons">play_arrow</span></div>
+          <div class="col">Turn off all lights</div>
+        </div>
+
+     </div>
   </main>
-  <footer class="container"><small>
+  <footer ><small>
       <!-- footer content will go here -->
       <div>
         <span>HomeHub v <span id="version"></span></span>
-        <span>|</span>
+        <span class="separator">|</span>
         <span>Running on <span id="hostname"></span></span>
-        <span>|</span>
+        <span class="separator">|</span>
         <span>Copyright &copy; boghammar.com 2024</span>
-        <span>|</span>
+        <span class="separator">|</span>
         <span>Powered by Node.js</span>
       </div>
     </small>

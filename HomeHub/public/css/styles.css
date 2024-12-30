@@ -2,12 +2,15 @@
   Declare global variables
   ------------------------------------------------------------------------------------- */
 :root {
+    --background-color: #11191f;
+    --bg-color: #11191f; /* chota-var */
+    --font-color: #fffefe; /* chota-var */
     --font-family: system-ui, -apple-system, Arial, Helvetica, sans-serif;
+    --font-family-sans: system-ui, -apple-system, Arial, Helvetica, sans-serif;
     --font-size: 16px;
     --font-weight: 400;
     --line-height: 1.5;
     --spacing: 1.0rem;
-    --background-color: #11191f;
     --color: hsl(205, 16%, 77%);
     --button-diameter: 40px;
 }
@@ -26,12 +29,14 @@
 /* -------------------------------------------------------------------------------------
   
   ------------------------------------------------------------------------------------- */
-  .deviceCard {
-    display: flex;
-    align-items: stretch;
-    padding: .3rem;
-    background-color: #ffffff1a;
-    margin: .3rem 0;
+.deviceCard, .actionCard {
+    padding: .3rem 1rem;
+    background-color: #ffffff1a; /* white with 10% opacity */
+    margin: .3rem;
+}
+
+.deviceCard span.material-icons {
+    margin-right: .3rem;
 }
 
 .deviceCardInner {
@@ -44,11 +49,13 @@
 
 .deviceStatus {
     font-size: x-small;
+    color: silver;
 }
 
 .btn {
     width: var(--button-diameter);
     height: var(--button-diameter);
+    padding: 1rem;
     border-radius: 100%;
     border-color: beige;
 }
@@ -57,6 +64,16 @@
 }
 .btn-off {
     background-color: #e2dada;
+}
+
+.separator {
+    margin: 1rem;
+    color: #f707d7; 
+}
+
+footer {
+    margin: 1rem auto;
+    max-width: var(--grid-maxWidth);
 }
 
 body {
