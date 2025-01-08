@@ -13,6 +13,10 @@
 #include <Adafruit_SSD1306.h>
 #include "Arduino.h"
 
+//libraries for OneWire
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
 // -------------------- Define the pins used by the LoRa transceiver module
 #define SCK 5
 #define MISO 19
@@ -45,6 +49,14 @@
 #define OLED_RST -1 //16
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// -------------------- Define the pins used by the OneWire pins
+#define ONE_WIRE_BUS 35
+
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+
+// -------------------- 
 
 void onReceive(int packetSize);
 void sendMessage(String message);
@@ -114,7 +126,12 @@ void setup() {
   display.setCursor(0,10);
   display.print("LoRa Initializing OK!");
   display.display();
+
+  sensors.begin(); // Init the DS18B20 sensor
   delay(2000);
+  int numberOfDevices = sensors.getDeviceCount();
+  int numberOfSensors = sensors.getDS18Count();
+  Serial.printf("DS18B20 sensor Initializing OK!\nDevices %d Sensors %d\n", numberOfDevices, numberOfSensors);
 }
 
 // ---------------------------------------------------------- Standard loop
@@ -131,6 +148,14 @@ void loop() {
     interval = random(2000) + 1000;     // 2-3 seconds
     LoRa.receive();                     // go back into receive mode
     counter++;
+
+    sensors.requestTemperatures(); 
+    float temperatureC = sensors.getTempCByIndex(0);
+    float temperatureF = sensors.getTempFByIndex(0);
+    Serial.print(temperatureC);
+    Serial.println("ºC");
+    Serial.print(temperatureF);
+    Serial.println("ºF");    
   }
 
   // ------------------ display send/recv status  
