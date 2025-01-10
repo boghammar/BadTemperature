@@ -3,8 +3,8 @@
 - **LORA nodes**:
   - **WaterTempNode**: A LORA based device with a temp sensor is attached near the water.
     - Battery driven
-    - Initially try with TTGO LORA32 but this might be too batteryhungry so if possible design oe based on an ATTiny (or) PIC mp
-  - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
+    - Initially try with TTGO LORA32 but this might be too batteryhungry so if possible design based on an ATTiny (or) PIC µP
+    - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
     - Solarpowered battery driven
     - ...
   - **LORAGateway**: A LORA based device functioning as a gateway between the LORA network and internet. 
