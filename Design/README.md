@@ -9,18 +9,21 @@
     - ...
   - **LORAGateway**: A LORA based device functioning as a gateway between the LORA network and internet. 
     - AC/USB power alternativly Solarbattery
-    - Sensordata published to MQTT Broker
+    - Connects to any available WiFi at the LORA node site.
+    - Sensordata published to the backen MQTT Broker
     - Historical data back to nodes stored o retrived?
     - Based on a Heltec Wireless Stick V3
     - ...
 
 - **Backend**
-  - MQTT Broker: Container deployment of Mosquitto on idefix. Problem with exposing since router behind Nat potential alternativ use HiveMQ until Cloudflare steps up
-  - Database: Container deployment of Influx on idefix.
-  - Automation: Container deployment of Node-Red on idefix.
+  - MQTT Broker: Container deployment of Mosquitto on idefix. Exposed via reverse proxy to the internet. Secured.
+  - Automation: Container deployment of Node-Red on idefix. Only reachable within internal network.
+  - Database: Container deployment of Influx on idefix. Only reachable within internal network.
 
 - **Frontend**
-  - NodeJS Express application deployed on Idefix. 
+  - "*SummerTime*": NodeJS Express application deployed on Idefix. Exposed via reverse proxy to the internet. Secured.
+
+![Design scetch](BadTemperature.drawio.png)
 
 # LORA Protocol
 
