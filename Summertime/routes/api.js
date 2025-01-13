@@ -11,6 +11,11 @@ let influxPassword = process.env.INFLUX_PASSWORD;
 let influxHost = process.env.INFLUX_HOST;
 let influxDB = process.env.INFLUX_DB;
 
+if (!influxUser || !influxPassword || !influxHost || !influxDB) {
+  console.error('Missing INFLUX_USER, INFLUX_PASSWORD, INFLUX_HOST or INFLUX_DB environment variables.');
+  process.exit(1);
+}
+
 const Influx = require('influx');
 const influx = new Influx.InfluxDB('http://' + influxUser + ':' + influxPassword + '@' + influxHost + ':8086/' + influxDB);
 
