@@ -1,0 +1,19 @@
+{
+  "name": "testapi",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "debug": "DEBUG=testapi:* PORT=8080  npm start"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "express": "~4.16.1",
+    "express-rate-limit": "^7.5.0",
+    "influx": "^5.9.3",
+    "joi": "^17.13.3",
+    "morgan": "~1.9.1"
+  }
+}

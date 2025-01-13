@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summertime</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Summer time dashboard</h1>
+    <div class="temperature">
+      <div class="thermometer">
+        <div class="thermometer-fill" id="air-thermometer-fill"></div>
+      </div>
+      <div>
+        <div>Air Temperature: <span id="air-temp">--</span>°C</div>
+        <div id="air-date" class="date">2025-05-05 12:00</div>
+      </div>
+    </div>
+    <div class="temperature">
+      <div class="thermometer">
+        <div class="thermometer-fill" id="water-thermometer-fill"></div>
+      </div>
+      <div>
+        <div>Water Temperature: <span id="water-temp">--</span>°C</div>
+        <div id="water-date" class="date">2025-05-05 12:00</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>Summertime v <span id="version"></span></span>
+    <span class="separator">|</span>
+    <span>Running on <span id="hostname"></span></span>
+    <span class="separator">|</span>
+    <span>Uptime: <span id="uptime"></span></span>
+  </footer>
+  <!-- Load the JavaScript file  -->
+  <script src="/javascripts/script.js" type="module"></script>
+</body>
+
+</html>
