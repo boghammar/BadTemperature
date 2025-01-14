@@ -23,7 +23,7 @@ const influx = new Influx.InfluxDB('http://' + influxUser + ':' + influxPassword
 // ---------------------------------- Limit requests max 3 in one minute
 const rateLimiter = rateLimit({
   windowsMS: 1 * 60 * 1000, //15*60*1000,
-  max: 3 //100
+  max: 10 //100
 });
 // padkod 9709
 /* ------------------------------------------- GET sensor data */

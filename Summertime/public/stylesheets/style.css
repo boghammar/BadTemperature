@@ -47,6 +47,10 @@ body {
   font-size: 0.6em;
   color: gray;
 }
+.tempvalue {
+  background-color: rgb(240, 240, 240);
+  padding: 2px 5px;
+}
 footer {
   /* text-align: center; */
   margin-top: 20px;
