@@ -8,6 +8,7 @@ var apiRouter = require('./routes/api');
 const os = require('os');
 const {version} = require('./package.json');
 
+const basepath = ''; // '/summertime'; // 
 var app = express();
 
 app.use(logger('dev'));
@@ -16,10 +17,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/api', apiRouter);
+// Middleware yo grab any basepath value
+app.use(function (req, res, next) {
+    const basepath = req.headers['x-base-path'] || '';
+    console.log("Basepath: '" + basepath + "'");
+    req.basepath = basepath;
+    next();
+});
 
-app.get('/info', handleInfo);
+app.use(basepath, indexRouter);
+app.use(basepath + '/api', apiRouter);
+
+app.get(basepath + '/info', handleInfo);
 
 async function handleInfo(request, response) {
   console.log("/info Request for " + request.url + " from " + request.socket.remoteAddress + ":" + request.socket.remotePort);

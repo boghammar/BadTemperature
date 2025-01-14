@@ -5,6 +5,7 @@ var rateLimit = require('express-rate-limit');
 var Joi = require('joi');
 var router = express.Router();
 
+// ---------------------------------- Influx config and DB connection
 require('dotenv').config();
 let influxUser = process.env.INFLUX_USER;
 let influxPassword = process.env.INFLUX_PASSWORD;

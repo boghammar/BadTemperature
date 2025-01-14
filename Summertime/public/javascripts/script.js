@@ -77,28 +77,57 @@ function temperatureGradient(value, lastColor) {
   str += `)`;
   return str;   
 }
+
+function applyTemperatures() {
+  const airColor = getTemperatureColor(airTemperature, thermometerMin, thermometerMax);
+  const waterColor = getTemperatureColor(waterTemperature, thermometerMin, thermometerMax);
+  console.log(`Air Temperature: ${airTemperature}°C, RGB: rgb(${airColor[0]}, ${airColor[1]}, ${airColor[2]})`);
+  console.log(`Water Temperature: ${waterTemperature}°C, RGB: rgb(${waterColor[0]}, ${waterColor[1]}, ${waterColor[2]})`);
+
+  document.getElementById('air-date').innerText = `${airTemperatureDate}`;
+  document.getElementById('air-temp').innerText = `${airTemperature}`;
+  document.getElementById('water-date').innerText = `${waterTemperatureDate}`;
+  document.getElementById('water-temp').innerText = `${waterTemperature}`;
+  document.getElementById('air-temp').style.color = `rgb(${airColor[0]}, ${airColor[1]}, ${airColor[2]})`;
+  document.getElementById('water-temp').style.color = `rgb(${waterColor[0]}, ${waterColor[1]}, ${waterColor[2]})`;
+
+  // Update thermometer fill height based on temperature
+  document.getElementById('air-thermometer-fill').style.height = temperatureFill(thermometerMin, thermometerMax, airTemperature); //`${(airTemperature / maxTemperature) * 100}%`;
+  document.getElementById('water-thermometer-fill').style.height = temperatureFill(thermometerMin, thermometerMax, waterTemperature); //`${(waterTemperature / maxTemperature) * 100}%`;
+
+  document.getElementById('air-thermometer-fill').style.background = temperatureGradient(airTemperature, airColor);
+  document.getElementById('water-thermometer-fill').style.background = temperatureGradient(waterTemperature, waterColor);
+}
 // -------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------
 // Sample data, replace with actual data fetching logic
-const airTemperature = 35; // Replace with actual air temperature data
-const waterTemperature = 19; // Replace with actual water temperature data
+let airTemperature = 35; // Replace with actual air temperature data
+let airTemperatureDate = '2025-01-01 12_00'; // Replace with actual air temperature data
+let waterTemperature = 19; // Replace with actual water temperature data
+let waterTemperatureDate = '2025-01-01 12_00'; // Replace with actual water temperature data
 
-const airColor = getTemperatureColor(airTemperature, thermometerMin, thermometerMax);
-const waterColor = getTemperatureColor(waterTemperature, thermometerMin, thermometerMax);
-console.log(`Air Temperature: ${airTemperature}°C, RGB: rgb(${airColor[0]}, ${airColor[1]}, ${airColor[2]})`);
-console.log(`Water Temperature: ${waterTemperature}°C, RGB: rgb(${waterColor[0]}, ${waterColor[1]}, ${waterColor[2]})`);
+function getTemperatureData(location, callback) {
+  fetch('/api/sensor/'+location+'/temp')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    callback(data);
+    return data;
+  })
+  .catch(error => console.error('Error:', error));
+}
 
-document.getElementById('air-temp').innerText = `${airTemperature}`;
-document.getElementById('water-temp').innerText = `${waterTemperature}`;
-document.getElementById('air-temp').style.color = `rgb(${airColor[0]}, ${airColor[1]}, ${airColor[2]})`;
-document.getElementById('water-temp').style.color = `rgb(${waterColor[0]}, ${waterColor[1]}, ${waterColor[2]})`;
+getTemperatureData('norrtorp/shore', (data) => {
+  airTemperature = data.value;
+  airTemperatureDate = data.timeHuman;
+  applyTemperatures();
+});
+getTemperatureData('norrtorp/lake', (data) => {
+  waterTemperature = data.value;
+  waterTemperatureDate = data.timeHuman;
+  applyTemperatures();
+});
 
-// Update thermometer fill height based on temperature
-document.getElementById('air-thermometer-fill').style.height = temperatureFill(thermometerMin, thermometerMax, airTemperature); //`${(airTemperature / maxTemperature) * 100}%`;
-document.getElementById('water-thermometer-fill').style.height = temperatureFill(thermometerMin, thermometerMax, waterTemperature); //`${(waterTemperature / maxTemperature) * 100}%`;
 
-document.getElementById('air-thermometer-fill').style.background = temperatureGradient(airTemperature, airColor);
-document.getElementById('water-thermometer-fill').style.background =  temperatureGradient(waterTemperature, waterColor);
-
-getInfo('/info?what=hostname', 'hostname');
-getInfo('/info?what=version', 'version');
+getInfo('./info?what=hostname', 'hostname');
+getInfo('./info?what=version', 'version');
