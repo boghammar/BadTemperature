@@ -51,7 +51,7 @@
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
 // -------------------- Define the pins used by the OneWire pins
-#define ONE_WIRE_BUS 35
+#define ONE_WIRE_BUS 12
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
@@ -139,9 +139,14 @@ void loop() {
  
   
   if (millis() - lastSendTime > interval) {
+    sensors.requestTemperatures(); 
+    float temperatureC = sensors.getTempCByIndex(0);
+    Serial.print(temperatureC);
+    Serial.println("ºC");
+
     Serial.print("Sending packet: ");
 
-    msg = "anders " + String(counter);
+    msg = "Loc " + String(counter) + " " + String(temperatureC);
     Serial.println(msg);
     sendMessage(msg);
     lastSendTime = millis();            // timestamp the message
@@ -149,13 +154,6 @@ void loop() {
     LoRa.receive();                     // go back into receive mode
     counter++;
 
-    sensors.requestTemperatures(); 
-    float temperatureC = sensors.getTempCByIndex(0);
-    float temperatureF = sensors.getTempFByIndex(0);
-    Serial.print(temperatureC);
-    Serial.println("ºC");
-    Serial.print(temperatureF);
-    Serial.println("ºF");    
   }
 
   // ------------------ display send/recv status  

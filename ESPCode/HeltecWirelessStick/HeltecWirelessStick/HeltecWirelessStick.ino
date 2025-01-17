@@ -8,7 +8,15 @@
 #include "WiFi.h"
 #include "LoRaWan_APP.h"
 #include <Wire.h>  
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
+#include "./secrets.h"
 #include "HT_SSD1306Wire.h"
+#define WIFI_SSID "Skistar" // "Anders iPhone 13" //"Ompabompa"
+#define WIFI_PASSWORD "SkistarVemdalen1"  // "0123456789" //"Bonnie23"
+
+WiFiClientSecure wifiClient;
+PubSubClient mqttClient(wifiClient);
 
 /********************************* lora  *********************************************/
 #define RF_FREQUENCY                                868000000 // Hz
@@ -54,6 +62,7 @@ int16_t Rssi,rxSize;
 String rssi = "RSSI --";
 String packSize = "--";
 String packet;
+String lastValue = "";
 String send_num;
 String show_lora = "lora data show";
 
@@ -140,7 +149,7 @@ void WIFISetUp(void) {
 	delay(100);
 	WiFi.mode(WIFI_STA);
 	WiFi.setAutoReconnect(true);
-	WiFi.begin("Ompabompa","Bonnie23");   //fill in "Your WiFi SSID","Your Password"
+	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  
 	delay(100);
 
 	byte count = 0;
@@ -155,10 +164,14 @@ void WIFISetUp(void) {
 	if(WiFi.status() == WL_CONNECTED) {
 		factory_display.drawString(0, 8, "OK.");
 		factory_display.display();
+    Serial.printf("Connected to '%s'", WIFI_SSID);
+    
+    wifiClient.setCACert(root_ca);
 	} else {
 		factory_display.clear();
 		factory_display.drawString(0, 8, "Failed");
 		factory_display.display();
+    Serial.printf("Failed to connect to '%s'", WIFI_SSID);
 	}
 
 	factory_display.drawString(0, 16, "WIFI Setup done");
@@ -233,6 +246,10 @@ void setup() {
 	WIFISetUp();
   factory_display.clear();
 
+  // ------------------------ Init MQTT
+  Serial.printf("Setting mqtt server %s on port %d\n",mqtt_server, mqtt_port);
+  mqttClient.setServer(mqtt_server, mqtt_port);
+
   // Attach interupthandler to user switch (GPIO0)
   attachInterrupt(0,interrupt_GPIO0,FALLING);
 
@@ -276,6 +293,12 @@ void loop() {
     esp_deep_sleep_start();
   }
 
+  // ----------------------------- Process MQTT
+  if (!mqttClient.connected()) {
+    reconnectMQTT();
+  }
+  mqttClient.loop();
+
   // ----------------------------- Display send/recv status
   if (receiveflag) {
     receiveflag = false; // signal that we have read incomming 
@@ -296,6 +319,13 @@ void loop() {
     factory_display.display();
     delay(10);
     factory_display.clear();
+
+    int len = packet.length();
+    String value = packet.substring(len-1-5);
+    if (!value.equals(lastValue)) {
+      lastValue = value;
+      publishMessage(value.c_str());
+    }
 
   }
   // ----------------------------- Handle current state
@@ -320,3 +350,26 @@ void loop() {
         break;
     }
 }
+
+// -------------------------------------------------------------------- 
+void reconnectMQTT() {
+  while (!mqttClient.connected()) {
+    Serial.printf("Attempting MQTT connection to %s on port %d ...",mqtt_server, mqtt_port);
+    if (mqttClient.connect("HeltecClient", mqtt_user, mqtt_password)) {
+      Serial.println("connected");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(" try again in 5 seconds");
+      delay(3000);
+    }
+  }
+}
+// -------------------------------------------------------------------- 
+void publishMessage(const char* value) {
+  if (mqttClient.connected()) {
+    Serial.printf("Publishing to iot/norrtorp/shore/temp %s\n", value);
+    mqttClient.publish("iot/norrtorp/shore/temp", value);
+  }
+}
+
