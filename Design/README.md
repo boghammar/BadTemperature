@@ -22,9 +22,20 @@
 
 - **Frontend**
   - "*SummerTime*": NodeJS Express application deployed on Idefix. Exposed via reverse proxy to the internet. Secured.
+    - Start page shows current values watertemp, airtemp, humidity. Date and time of measuremenst. Current location and date and time
+    - Possibility to show history of a sensor value.
+    - Feedback form
 
 ![Design scetch](BadTemperature.drawio.png)
 
+## InfluxDB
+
+## MQTT setup
+
+- Base topic is iot
+- site and location are subtopics
+
+MQTT is also used as a node monitoring using the birth and LWT messages.
 # LORA Protocol
 
 The LORA devices communicate with a JSon based protocol as payload.
@@ -40,3 +51,5 @@ All messages shall be acknowledged
    "msg" : "actual message"
 }
 ```
+
+Node keep alive monitoring is done with ...
