@@ -1,10 +1,10 @@
 {
-  "name": "testapi",
+  "name": "summertime",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "DEBUG=testapi:* PORT=8080  npm start"
+    "debug": "DEBUG=summertime:* PORT=8080  npm start"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
