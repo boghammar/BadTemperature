@@ -12,8 +12,8 @@
 #include <PubSubClient.h>
 #include "./secrets.h"
 #include "HT_SSD1306Wire.h"
-#define WIFI_SSID "Skistar" // "Anders iPhone 13" //"Ompabompa"
-#define WIFI_PASSWORD "SkistarVemdalen1"  // "0123456789" //"Bonnie23"
+#define WIFI_SSID "Ompabompa" // "Skistar" // "Anders iPhone 13" // 
+#define WIFI_PASSWORD "Bonnie23" // "SkistarVemdalen1"  // "0123456789" // 
 
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
@@ -39,7 +39,7 @@ PubSubClient mqttClient(wifiClient);
 
 
 #define RX_TIMEOUT_VALUE                            1000
-#define BUFFER_SIZE                                 30 // Define the payload size here
+#define BUFFER_SIZE                                 100 // Define the payload size here
 
 /********************************* lora declarations *********************************************/
 static RadioEvents_t RadioEvents;

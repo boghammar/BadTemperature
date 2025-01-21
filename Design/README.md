@@ -36,7 +36,9 @@
 - site and location are subtopics
 
 MQTT is also used as a node monitoring using the birth and LWT messages.
-# LORA Protocol
+
+# LORA devices
+## Protocol
 
 The LORA devices communicate with a JSon based protocol as payload.
 There are 2 types of messages sensordata and configuration
@@ -53,3 +55,19 @@ All messages shall be acknowledged
 ```
 
 Node keep alive monitoring is done with ...
+
+## WaterTempNode
+
+ [Lilygo TTGO LORA32 V2.1](https://lilygo.cc/products/lora3?srsltid=AfmBOop02ZAt2DNnjyeRxOZtab0ygGJ0dLK-7sXWsq4PshTEKc9ZP_9H).
+
+Features:
+- Lora capable
+- OneWire for the temp measurements
+- Battery powered
+- Deep sleep sending measurements every 30 minutes
+
+## LORAGateway
+
+[Heltec Wireless Stick V3](https://heltec.org/project/wireless-stick-v3/).
+
+Features:

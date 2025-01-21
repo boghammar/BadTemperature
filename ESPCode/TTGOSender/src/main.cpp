@@ -17,6 +17,8 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
+#include "loramessage.h"
+
 // -------------------- Define the pins used by the LoRa transceiver module
 #define SCK 5
 #define MISO 19
@@ -56,27 +58,56 @@
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
-// -------------------- 
+// ---------------------------------- Function prototypes 
 
 void onReceive(int packetSize);
 void sendMessage(String message);
+void sendErrorMsg(String error);
+String getMsgId();
 
+/* ------------------ define sleep parameters */
+#define TIME_TO_SLEEP  10          /* Time ESP32 will go to sleep (in seconds) */
+#define uS_TO_S_FACTOR 1000000ULL /* Conversion factor for micro seconds to seconds */
+RTC_DATA_ATTR int bootCount = 0;   /* store data in RTC memory to use it over reboots*/
+void print_wakeup_reason();
+
+/* ------------------ define states */
+#define STATE_SEND 0 
+#define STATE_RECEIVE 1
+#define STATE_GO_TO_SLEEP 2
+int state = STATE_SEND;
+
+/* ------------------ define variables */
 int rssi = 0;
 //packet counter
 int counter = 0;
 String msg  = "";
 String lastInMsg = "";
+float tempDiffThreshold = 0.8;                  // Only report if change is this much
+RTC_DATA_ATTR float lastReportedTemperature = -127.00;  // Persistent beween reboots
+RTC_DATA_ATTR int gMsgId = 0;                   // Persistent beween reboots
 long lastSendTime = 0;        // last send time
 int interval = 2000;          // interval between sends
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
 
-// ---------------------------------------------------------- Standard setup
+// ---------------------------------------------------------------------------------------  Standard setup
 void setup() {
   //initialize Serial Monitor
   Serial.begin(115200);
   while(!Serial);
-  Serial.println("LoRa with TTGO LoRa32 V2.1");
+
+  char ssid[23];
+  snprintf(ssid, 23, "ESP-%llX", ESP.getEfuseMac());
+  Serial.print("---------------------------------------------------------- LoRa with TTGO LoRa32 V2.1 ");
+  Serial.println(ssid);
+
+  //Increment boot number and print it every reboot
+  ++bootCount;
+  Serial.println("Boot number: " + String(bootCount));
+
+  //Print the wakeup reason
+  print_wakeup_reason();
 
   // ------------------ reset OLED display via software
   pinMode(OLED_RST, OUTPUT);
@@ -96,7 +127,8 @@ void setup() {
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0,0);
-  display.print("LORA SENDER ");
+  display.print("LORA SENDER Boot# ");
+  display.print(bootCount);
   display.display();
   
   // ------------------ SPI LoRa pins
@@ -134,33 +166,62 @@ void setup() {
   Serial.printf("DS18B20 sensor Initializing OK!\nDevices %d Sensors %d\n", numberOfDevices, numberOfSensors);
 }
 
-// ---------------------------------------------------------- Standard loop
+// --------------------------------------------------------------------------------------- Standard loop
 void loop() {
  
   
-  if (millis() - lastSendTime > interval) {
+  if (millis() - lastSendTime > interval && state == STATE_SEND) {  // check if it's time to send
     sensors.requestTemperatures(); 
     float temperatureC = sensors.getTempCByIndex(0);
-    Serial.print(temperatureC);
-    Serial.println("ºC");
 
-    Serial.print("Sending packet: ");
+    if (temperatureC != -127.00 && temperatureC != lastReportedTemperature) { // temperature is valid and has changed
+      Serial.print(temperatureC);
+      Serial.println("ºC");
 
-    msg = "Loc " + String(counter) + " " + String(temperatureC);
-    Serial.println(msg);
-    sendMessage(msg);
-    lastSendTime = millis();            // timestamp the message
-    interval = random(2000) + 1000;     // 2-3 seconds
-    LoRa.receive();                     // go back into receive mode
-    counter++;
+      float diff = temperatureC - lastReportedTemperature;
+      if (diff < 0) {
+        diff = -diff;
+      }
+      Serial.print("Diff: ");
+      Serial.println(diff);
 
+      if (diff > tempDiffThreshold) {
+
+        Serial.print("Sending packet: ");
+
+        msg = "Loc " + String(counter) + " " + String(temperatureC);
+        Serial.println(msg);
+        sendMessage(msg);
+        lastSendTime = millis();            // timestamp the message
+        interval = random(2000) + 1000;     // 2-3 seconds
+        LoRa.receive();                     // go back into receive mode
+        counter++;
+        lastReportedTemperature = temperatureC;
+
+        state = STATE_RECEIVE;
+        LoRa.receive();
+      } else {
+        Serial.printf("No change last %fºC curr %fºC diff %fºC\n", lastReportedTemperature, temperatureC, diff);
+        state = STATE_GO_TO_SLEEP;
+      }
+    } else {
+      if (temperatureC == -127.00) {
+        Serial.println("No temp sensor(s) found");
+        sendErrorMsg("No temp sensor(s) found");
+        state = STATE_RECEIVE;
+        LoRa.receive();
+      } else {
+        state = STATE_GO_TO_SLEEP;
+      }
+    }
   }
 
   // ------------------ display send/recv status  
   String tmp = "";
   display.clearDisplay();
   display.setCursor(0,0);
-  display.println("LORA TRANSCEIVER");
+  display.print("LORA TRANSCEIVER ST=");
+  display.println(state);
   
   display.setCursor(0,20);
   display.setTextSize(1);
@@ -177,8 +238,35 @@ void loop() {
   
   display.display();
 
+  if (state == STATE_GO_TO_SLEEP) {
+    Serial.println("Going to sleep now");
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+    display.ssd1306_command(SSD1306_DISPLAYOFF);
+    LoRa.sleep();
+    delay(500);
+    esp_deep_sleep_start();
+  }
   
   //delay(500);
+}
+
+// ----------------------------------------------------------------------------
+// SLEEP FUNCTIONS
+// ----------------------------------------------------------------------------
+/* ------------------ Method to print the reason by which ESP32 has been awaken from sleep */
+void print_wakeup_reason() {
+  esp_sleep_wakeup_cause_t wakeup_reason;
+
+  wakeup_reason = esp_sleep_get_wakeup_cause();
+
+  switch (wakeup_reason) {
+    case ESP_SLEEP_WAKEUP_EXT0:     Serial.println("Wakeup caused by external signal using RTC_IO"); break;
+    case ESP_SLEEP_WAKEUP_EXT1:     Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
+    case ESP_SLEEP_WAKEUP_TIMER:    Serial.println("Wakeup caused by timer"); break;
+    case ESP_SLEEP_WAKEUP_TOUCHPAD: Serial.println("Wakeup caused by touchpad"); break;
+    case ESP_SLEEP_WAKEUP_ULP:      Serial.println("Wakeup caused by ULP program"); break;
+    default:                        Serial.printf("Wakeup was not caused by deep sleep: %d\n", wakeup_reason); break;
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -186,10 +274,22 @@ void loop() {
 // ----------------------------------------------------------------------------
 // ---------------------------------------------------------- Send a message
 void sendMessage(String message) {
+  String msgId = getMsgId();
   // Send LoRa packet to receiver
   LoRa.beginPacket();
   LoRa.print(message);
   LoRa.endPacket();
+}
+// ---------------------------------------------------------- Send an error message
+void sendErrorMsg(String error) {
+
+  String msgId = getMsgId();
+  LoraMessage loraMsg(msgId, String(GATEWAY_ID), String(CMD_ERROR_REPORT), error);
+  String json = loraMsg.getMessage();
+  Serial.println(json);
+  LoRa.beginPacket();
+  LoRa.print(json);
+  LoRa.endPacket();  
 }
 // ---------------------------------------------------------- Recieve callback
 void onReceive(int packetSize) {
@@ -216,5 +316,11 @@ void onReceive(int packetSize) {
   //   Serial.println("error: message length does not match length");
   //   return;                             // skip rest of function
   // }
-
+  state = STATE_GO_TO_SLEEP;
+}
+// ---------------------------------------------------------- Get the messageID
+String getMsgId() {
+  String id = "ESP"+String(ESP.getEfuseMac())+String("_")+String(gMsgId);
+  gMsgId++;
+  return id;
 }
