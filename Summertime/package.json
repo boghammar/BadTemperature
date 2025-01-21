@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "DEBUG=summertime:* PORT=8080  npm start"
+    "debug": "DEBUG=summertime:* PORT=8080  npm start",
+    "release": "npm version patch && git push --tags"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

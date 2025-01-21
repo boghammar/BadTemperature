@@ -18,6 +18,9 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* ------------------------------------------------- Temperatures */
+
 .temperature {
   font-size: 2em;
   margin: 10px 0;
@@ -51,6 +54,17 @@ body {
   background-color: rgb(240, 240, 240);
   padding: 2px 5px;
 }
+
+/* ------------------------------------------------- charts */
+.chartContainer {
+  /*display: flex;
+  justify-content: center;
+  margin: 20px auto;*/
+  position: relative;
+  width: 70vw;
+  height: 70vh;
+}
+/* ------------------------------------------------- footer */
 footer {
   /* text-align: center; */
   margin-top: 20px;

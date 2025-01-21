@@ -25,7 +25,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(basepath, indexRouter);
+//app.use(basepath, indexRouter);
 app.use(basepath + '/api', apiRouter);
 
 app.get(basepath + '/info', handleInfo);

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Summertime history</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@^2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script></head>
+
+<body>
+    <div class="container">
+        <div class="chartContainer">   
+            <canvas id="myChart"></canvas>
+        </div>
+        <button id="lastDay" >Last day</button>
+        <button id="lastWeek" >Last week</button>
+        <button id="lastMonth">Last month</button>
+        <div class="menu"><a href="/"><span class="material-icons">home</span></a></div>
+    </div>
+    <footer>
+    <span>Summertime v <span id="version"></span></span>
+    <span class="separator">|</span>
+    <span>Running on <span id="hostname"></span></span>
+    <span class="separator">|</span>
+    <span>Uptime: <span id="uptime"></span></span>
+    </footer>
+    <!-- Load the JavaScript file  -->
+    <script src="/javascripts/script.js" type="module"></script>
+    <script src="/javascripts/scripthistory.js" type="module"></script>
+</body>
+
+</html>
