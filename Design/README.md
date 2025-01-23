@@ -3,8 +3,9 @@
 - **LORA nodes**:
   - **WaterTempNode**: A LORA based device with a temp sensor is attached near the water.
     - Battery driven
+    - Two temp sensors. Both DS18B20 water proof and air proof
     - Initially try with TTGO LORA32 but this might be too batteryhungry so if possible design based on an ATTiny (or) PIC µP
-    - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
+  - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
     - Solarpowered battery driven
     - ...
   - **LORAGateway**: A LORA based device functioning as a gateway between the LORA network and internet. 
