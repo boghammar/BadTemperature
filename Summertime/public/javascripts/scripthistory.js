@@ -111,6 +111,7 @@ function createChart(myData) {
             options: options
         });
 
+        document.getElementById('lastHour').addEventListener('click', () => getLastValues('hour'));
         document.getElementById('lastDay').addEventListener('click', () => getLastValues('day'));
         document.getElementById('lastWeek').addEventListener('click', () => getLastValues('week'));
         document.getElementById('lastMonth').addEventListener('click', () => getLastValues('month'));
