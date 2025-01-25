@@ -1,4 +1,8 @@
 // Secrets
+
+#define WIFI_SSID "Ompabompa" // "Skistar" // "Anders iPhone 13" // 
+#define WIFI_PASSWORD "Bonnie23" // "SkistarVemdalen1"  // "0123456789" // 
+
 #define HIVEMQ
 
 #ifdef HIVEMQ

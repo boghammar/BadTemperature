@@ -42,21 +42,8 @@ MQTT is also used as a node monitoring using the birth and LWT messages.
 ## Protocol
 
 The LORA devices communicate with a JSon based protocol as payload.
-There are 2 types of messages sensordata and configuration
-A message can be broadcasted to all nodes or be directed to one node
-All messages shall be acknowledged
 
-```
-{
-   "mid" : "message id",
-   "dst" : "destaddress Or Broadcast",
-   "cmd" : "type of message"
-   "msg" : "actual message"
-}
-```
-
-Node keep alive monitoring is done with ...
-
+see [LORAProtocol.md](./LORAProtocol.md)
 ## WaterTempNode
 
  [Lilygo TTGO LORA32 V2.1](https://lilygo.cc/products/lora3?srsltid=AfmBOop02ZAt2DNnjyeRxOZtab0ygGJ0dLK-7sXWsq4PshTEKc9ZP_9H).

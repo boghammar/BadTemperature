@@ -12,8 +12,6 @@
 #include <PubSubClient.h>
 #include "./secrets.h"
 #include "HT_SSD1306Wire.h"
-#define WIFI_SSID "Ompabompa" // "Skistar" // "Anders iPhone 13" // 
-#define WIFI_PASSWORD "Bonnie23" // "SkistarVemdalen1"  // "0123456789" // 
 
 WiFiClientSecure wifiClient;
 PubSubClient mqttClient(wifiClient);
