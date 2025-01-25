@@ -1,5 +1,6 @@
 # secrets
 secrets.*
+
 # Logs
 logs
 *.log
