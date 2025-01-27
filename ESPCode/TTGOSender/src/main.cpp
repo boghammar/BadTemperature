@@ -127,7 +127,7 @@ void setup() {
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0,0);
-  display.print("LORA SENDER Boot# ");
+  display.print("LORA SNDR B# ");
   display.print(bootCount);
   display.display();
   
@@ -152,7 +152,7 @@ void setup() {
   // LoRa.setIqInversion(LORA_IQ_INVERSION_ON);
   // ------------------ start listening for incomming packets
   LoRa.onReceive(onReceive);
-  LoRa.receive();
+  //LoRa.receive();
 
   Serial.println("LoRa Initializing OK!");
   display.setCursor(0,10);
@@ -189,7 +189,7 @@ void loop() {
 
         Serial.print("Sending packet: ");
 
-        msg = "Loc " + String(counter) + " " + String(temperatureC);
+        msg = "B " + String(bootCount) + " " + String(temperatureC);
         Serial.println(msg);
         sendMessage(msg);
         lastSendTime = millis();            // timestamp the message
