@@ -85,6 +85,8 @@ The protocol is based on JSON messages. There are no timestamps in the messages 
 
 Since sensors normally are in sleep mode all message sequences are initiated by sensor nodes. The gateway can initiate a message to the sensor nodes within an acknowledge message using the "c" field. This can be that the sensor shall wait for a message from the gateway, it can be a config message or a request for a report message.
 
+![State Machine](LORANodeStates.drawio.png)
+
 ## Sensor node startup sequence
 
 1. Send "I'm here" message to gateway
