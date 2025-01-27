@@ -57,7 +57,10 @@ The protocol is based on JSON messages. There are no timestamps in the messages 
   - "C" for "Config" message:
 ```
 {
-   "i" : "TBD",
+   "s" : "Sleep time in seconds",
+   "k" : "Number of boots between heartbeats",
+   "dt" : "temperature difference for reporting",
+   ...
 }
 ```
   - "R" for "Report" message: 
