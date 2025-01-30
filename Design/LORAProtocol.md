@@ -18,7 +18,12 @@ The **sensor nodes** are responsible for the following:
 - Keeping track of their own health and report that to the gateway
 
 ## Protocol Structure
-The protocol is based on JSON messages. There are no timestamps in the messages since there is no RTC on the sensor nodes. Each message is a JSON object with the following fields:
+The protocol is based on JSON messages.
+- Each message is a JSON object.
+- All JSON keys are lowercase and only one character.
+- There are no timestamps in the messages since there is no RTC on the sensor nodes.
+
+A message has the following fields:
 ```
 {
    "i" : "message id",
@@ -69,29 +74,39 @@ The protocol is based on JSON messages. There are no timestamps in the messages 
    "n" : "devicename",
    "t" : "devicetype",
    "a" : "json object with current status such as battery level, location, etc",
-   "s" : "json object with sensor definitions",   
+   "s" : "json array with sensor definitions",   
 }
 ```
-    - "a" for sensor status json:
+  - "a" for sensor status json:
 ```
 {
+   "l" : device location, /* shore, lake, ... */
    "b" : battery level,
    ...
 }
 ```
-    - "s" for sensor definitions json:
+  - "s" for sensor definitions json array, one item per sensor:
 ```
-{
+[
+  {
+   "i" : sensor id, /* device internal sensor  id */
+   "l" : sensor location, /* air, water, ground */
+   "n" : sensor name, /* e.g. DS18B20 */
+   "t" : sensor value type, /*"T","P","H","A", ...*/
+   "u" : sensor unit, /*"C","hPA", "%", "m", ... */
    "r" : sensor resolution,
+   "a" : sensor accuracy,
    ...
-}
+  },
+  ...
+]
 ```
   - "D" for "Data" message: 
 ```
 {
+   "i" : "sensor id", /* See the Report message above for "i", location and the reported unit
    "t" : "datatype",
    "v" : "data value",
-   "u" : "unit", /* optional */
 }
 ```
 
