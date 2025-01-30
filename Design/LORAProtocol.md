@@ -72,6 +72,20 @@ The protocol is based on JSON messages. There are no timestamps in the messages 
    "s" : "json object with sensor definitions",   
 }
 ```
+    - "a" for sensor status json:
+```
+{
+   "b" : battery level,
+   ...
+}
+```
+    - "s" for sensor definitions json:
+```
+{
+   "r" : sensor resolution,
+   ...
+}
+```
   - "D" for "Data" message: 
 ```
 {
