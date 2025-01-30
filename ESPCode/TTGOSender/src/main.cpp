@@ -163,7 +163,9 @@ void setup() {
   delay(2000);
   int numberOfDevices = sensors.getDeviceCount();
   int numberOfSensors = sensors.getDS18Count();
-  Serial.printf("DS18B20 sensor Initializing OK!\nDevices %d Sensors %d\n", numberOfDevices, numberOfSensors);
+  /* get sensor resolution */
+  int resolution = sensors.getResolution(/* sensorAddress */ 0);
+  Serial.printf("DS18B20 sensor Initializing OK!\nDevices %d Sensors %d Res: %d\n", numberOfDevices, numberOfSensors, resolution);
 }
 
 // --------------------------------------------------------------------------------------- Standard loop
