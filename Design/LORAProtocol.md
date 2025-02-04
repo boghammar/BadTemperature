@@ -75,11 +75,11 @@ A message has the following fields:
 {
    "n" : "devicename",
    "t" : "devicetype",
-   "a" : "json object with current status such as battery level, location, etc",
+   "d" : "json object with current device status such as battery level, location, etc",
    "s" : "json array with sensor definitions",   
 }
 ```
-  - "a" for sensor status json:
+  - "d" for device status json:
 ```
 {
    "l" : device location, /* shore, lake, ... */
