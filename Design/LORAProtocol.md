@@ -63,8 +63,10 @@ A message has the following fields:
 ```
 {
    "s" : "Sleep time in seconds",
-   "k" : "Number of boots between heartbeats",
+   "h" : "Number of boots between heartbeats",
    "dt" : "temperature difference for reporting",
+   "dh" : "humidity difference for reporting",
+   "dp" : "pressure difference for reporting",
    ...
 }
 ```
