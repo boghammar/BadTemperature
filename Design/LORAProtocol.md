@@ -48,6 +48,8 @@ A message has the following fields:
 {
    "n" : "devicename",
    "t" : "devicetype",
+   "l" : device location, /* shore, lake, ... */
+   "b" : battery level,
 }
 ```
   - "A" for "Acknowledge" message: 
@@ -73,8 +75,6 @@ A message has the following fields:
   - "R" for "Report" message: 
 ```
 {
-   "n" : "devicename",
-   "t" : "devicetype",
    "d" : "json object with current device status such as battery level, location, etc",
    "s" : "json array with sensor definitions",   
 }
@@ -82,6 +82,8 @@ A message has the following fields:
   - "d" for device status json:
 ```
 {
+   "n" : "devicename",
+   "t" : "devicetype",
    "l" : device location, /* shore, lake, ... */
    "b" : battery level,
    ...
