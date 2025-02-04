@@ -48,6 +48,7 @@ A message has the following fields:
 {
    "n" : "devicename",
    "t" : "devicetype",
+   "s" : "device site",
    "l" : device location, /* shore, lake, ... */
    "b" : battery level,
 }
@@ -84,6 +85,7 @@ A message has the following fields:
 {
    "n" : "devicename",
    "t" : "devicetype",
+   "s" : "device site",
    "l" : device location, /* shore, lake, ... */
    "b" : battery level,
    ...
