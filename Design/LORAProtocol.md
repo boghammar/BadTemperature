@@ -107,13 +107,15 @@ A message has the following fields:
   ...
 ]
 ```
-  - "D" for "Data" message: 
+  - "D" for "Data" message is an array of json objects for each sensor that is reporting: 
 ```
-{
+[{
    "i" : "sensor id", /* See the Report message above for "i", location and the reported unit
    "t" : "datatype",
    "v" : "data value",
-}
+},
+...
+]
 ```
 
 ## Message sequences
