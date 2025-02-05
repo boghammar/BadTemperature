@@ -4,6 +4,16 @@
  *
  * boghammar.com 2025
  */
+ /* WIFI scan
+23:23:02.559 ->  1 | Ompabompa                        | 0E:EA:14:1B:C5:2A |  -70 | 11 | WPA2
+23:23:02.559 ->  2 | Connecting …                     | 0C:EA:14:2B:C5:2A |  -71 | 11 | WPA2
+23:23:02.559 ->  3 | Connecting III                   | 0E:EA:14:2B:C5:2A |  -72 | 11 | WPA2
+23:23:02.592 ->  4 | Anders iPhone 13                 | B2:09:CA:8B:14:AD |  -87 | 11 | WPA2
+23:23:02.592 ->  5 | Connecting III                   | 9E:05:D6:16:36:B1 |  -89 |  1 | WPA2
+23:23:02.592 ->  6 | Connecting …                     | 9C:05:D6:26:36:B1 |  -90 |  1 | WPA2
+23:23:02.632 ->  7 | Ompabompa                        | 9E:05:D6:46:36:B1 |  -90 |  1 | WPA2
+23:23:02.632 ->  8 | Frontside                        | BC:AE:C5:EA:EF:9F |  -91 |  6 | WPA2
+ */
 #include "Arduino.h"
 #include "WiFi.h"
 #include "LoRaWan_APP.h"
@@ -37,7 +47,7 @@ PubSubClient mqttClient(wifiClient);
 
 
 #define RX_TIMEOUT_VALUE                            1000
-#define BUFFER_SIZE                                 100 // Define the payload size here
+#define BUFFER_SIZE                                 1000 // Define the payload size here
 
 /********************************* lora declarations *********************************************/
 static RadioEvents_t RadioEvents;
@@ -90,12 +100,13 @@ void OnTxTimeout( void ) {
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr ) {
 	  rxNumber++;
     Rssi=rssi;
-    rxSize=size;
-    memcpy(rxpacket, payload, size );
-    rxpacket[size]='\0';
+    uint16_t len =size; // How much I got
+    rxSize=(size > BUFFER_SIZE ? BUFFER_SIZE-1: size); // How much to read
+    memcpy(rxpacket, payload, rxSize);
+    rxpacket[rxSize]='\0';
     Radio.Sleep( );
 
-    Serial.printf("\r\nreceived packet \"%s\" with Rssi %d , length %d\r\n",rxpacket,Rssi,rxSize);
+    Serial.printf("\r\nreceived packet \"%s\" with Rssi %d , length %d (read %d)\r\n",rxpacket,Rssi,len,rxSize);
     Serial.println("wait to send next packet");
 	  receiveflag = true;
     state=STATE_TX;
@@ -141,25 +152,43 @@ SSD1306Wire  factory_display(0x3c, 500000, SDA_OLED, SCL_OLED, GEOMETRY_64_32, R
 // -------------------------------------------------------------------- 
 // WiFi utils
 // -------------------------------------------------------------------- 
+void strToBSSID(const char* macStr, uint8_t* bssidArray) {
+    sscanf(macStr, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx", 
+           &bssidArray[0], &bssidArray[1], &bssidArray[2], 
+           &bssidArray[3], &bssidArray[4], &bssidArray[5]);
+}
 void WIFISetUp(void) {
 	// Set WiFi to station mode and disconnect from an AP if it was previously connected
 	WiFi.disconnect(true);
 	delay(100);
 	WiFi.mode(WIFI_STA);
 	WiFi.setAutoReconnect(true);
-	WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  
-	delay(100);
+
+  #ifdef WIFI_BSSID
+    Serial.printf("Connecting to %s (%s)\n", WIFI_SSID, WIFI_BSSID);
+    uint8_t bssid[6];
+    strToBSSID(WIFI_BSSID, bssid);
+	  WiFi.begin(WIFI_SSID, WIFI_PASSWORD, 0, bssid);  
+  #else
+    Serial.printf("Connecting to %s \n", WIFI_SSID);
+	  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);  
+  #endif
+
+	delay(2000);
 
 	byte count = 0;
 	while(WiFi.status() != WL_CONNECTED && count < 10) {
+    wl_status_t status =WiFi.status();
 		count ++;
-		delay(500);
-		factory_display.drawString(0, 0, "Connecting...");
+    String mm = String("WC ")+(int)status+" "+count+"...";
+	  factory_display.clear();
+		factory_display.drawString(0, 0, mm.c_str());
 		factory_display.display();
+		delay(1000);
 	}
 	factory_display.clear();
 
-	if(WiFi.status() == WL_CONNECTED) {
+  if(WiFi.status() == WL_CONNECTED) {
 		factory_display.drawString(0, 8, "OK.");
 		factory_display.display();
     Serial.printf("Connected to '%s'", WIFI_SSID);
@@ -167,9 +196,9 @@ void WIFISetUp(void) {
     wifiClient.setCACert(root_ca);
 	} else {
 		factory_display.clear();
-		factory_display.drawString(0, 8, "Failed");
+		factory_display.drawString(0, 8, "Failed WiFi");
 		factory_display.display();
-    Serial.printf("Failed to connect to '%s'", WIFI_SSID);
+    Serial.printf("Failed to connect to '%s' IP %s\n", WIFI_SSID, WiFi.localIP().toString());
 	}
 
 	factory_display.drawString(0, 16, "WIFI Setup done");

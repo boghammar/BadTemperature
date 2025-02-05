@@ -11,7 +11,7 @@ const {version} = require('./package.json');
 const basepath = ''; // '/summertime'; // 
 var app = express();
 
-app.use(logger('dev'));
+app.use(logger('short'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

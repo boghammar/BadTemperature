@@ -1,0 +1,23 @@
+{
+    "name": "LoraNode",
+    "keywords": "json, lora, sensor",
+    "description": "A simple JSon based protocol for LORA sensor nodes",
+    "homepage": "https://dev.andersboghammar.com/loranode",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/boghammar/BadTemperature.git"
+    },
+    "version": "1.0.0",
+    "authors": {
+      "name": "Anders Boghammar",
+      "url": "https://dev.andersboghammar.com/loranode"
+    },
+    "dependencies": {
+      "bblanchon/ArduinoJson":"@^7.3.0"
+    },
+    "export": {
+      "include": ["src", "examples", "LICENSE.txt", "LoraNode.h"]
+    },
+    "frameworks": "*",
+    "platforms": "*"
+  }
