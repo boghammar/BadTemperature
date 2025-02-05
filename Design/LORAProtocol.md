@@ -37,17 +37,20 @@ A message has the following fields:
 - The **message id** (i) is a unique identifier for the message. It is a 32 bit number. It's just a sequence id that the sender keeps track of.
 - The **destination address** (d) is a 32 bit number. It is used to identify the recipient of the message. If the destination address is "Broadcast" the message is sent to all nodes. The gateway always has id 1 and a broadcast message has id 0. The sensor nodes have a unique id based on the MAC address.
 - The **message type** (t) is a character. It is used to identify the type of the message. Valid types are:
-  - "I" for "I'm here" message
+  - "H" for "Hello I'm here" message
   - "A" for "Acknowledge" message (used to confirm receipt of a message)
   - "C" for "Config" message (used to configure the sensor node hence sent from gateway to sensor nodes)
   - "R" for "Report" message (used to report the status of the sensor node)
   - "D" for "Data" message (used to send sensor data)
 - The **actual message** (m) is a JSON object. It is used to carry the data of the message. The format of m is:
-  - "I" for "I'm here" message: 
+  - "H" for "Hello I'm here" message: 
 ```
 {
    "n" : "devicename",
    "t" : "devicetype",
+   "s" : "device site",
+   "l" : device location, /* shore, lake, ... */
+   "b" : battery level,
 }
 ```
   - "A" for "Acknowledge" message: 
@@ -63,23 +66,26 @@ A message has the following fields:
 ```
 {
    "s" : "Sleep time in seconds",
-   "k" : "Number of boots between heartbeats",
+   "h" : "Number of boots between heartbeats",
    "dt" : "temperature difference for reporting",
+   "dh" : "humidity difference for reporting",
+   "dp" : "pressure difference for reporting",
    ...
 }
 ```
   - "R" for "Report" message: 
 ```
 {
-   "n" : "devicename",
-   "t" : "devicetype",
-   "a" : "json object with current status such as battery level, location, etc",
+   "d" : "json object with current device status such as battery level, location, etc",
    "s" : "json array with sensor definitions",   
 }
 ```
-  - "a" for sensor status json:
+  - "d" for device status json:
 ```
 {
+   "n" : "devicename",
+   "t" : "devicetype",
+   "s" : "device site",
    "l" : device location, /* shore, lake, ... */
    "b" : battery level,
    ...
@@ -101,13 +107,15 @@ A message has the following fields:
   ...
 ]
 ```
-  - "D" for "Data" message: 
+  - "D" for "Data" message is an array of json objects for each sensor that is reporting: 
 ```
-{
+[{
    "i" : "sensor id", /* See the Report message above for "i", location and the reported unit
    "t" : "datatype",
    "v" : "data value",
-}
+},
+...
+]
 ```
 
 ## Message sequences
