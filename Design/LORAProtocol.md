@@ -37,13 +37,13 @@ A message has the following fields:
 - The **message id** (i) is a unique identifier for the message. It is a 32 bit number. It's just a sequence id that the sender keeps track of.
 - The **destination address** (d) is a 32 bit number. It is used to identify the recipient of the message. If the destination address is "Broadcast" the message is sent to all nodes. The gateway always has id 1 and a broadcast message has id 0. The sensor nodes have a unique id based on the MAC address.
 - The **message type** (t) is a character. It is used to identify the type of the message. Valid types are:
-  - "I" for "I'm here" message
+  - "H" for "Hello I'm here" message
   - "A" for "Acknowledge" message (used to confirm receipt of a message)
   - "C" for "Config" message (used to configure the sensor node hence sent from gateway to sensor nodes)
   - "R" for "Report" message (used to report the status of the sensor node)
   - "D" for "Data" message (used to send sensor data)
 - The **actual message** (m) is a JSON object. It is used to carry the data of the message. The format of m is:
-  - "I" for "I'm here" message: 
+  - "H" for "Hello I'm here" message: 
 ```
 {
    "n" : "devicename",
