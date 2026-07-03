@@ -7,6 +7,8 @@
     - Initially try with ~~TTGO LORA32 but this might be too batteryhungry so if possible~~ a RAK4631 and a RAK19007 base board. Other alternatives are a design based on an ATTiny (or) PIC µP
   - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
     - Solarpowered battery driven
+    - Potentially we can use the TTGO LORA32 if we have a good solar panel that can power the batteries
+    - It has a BME280 or BMP280 to measure air temperature and air pressure
     - ...
   - **LORAGateway**: A LORA based device functioning as a gateway between the LORA network and internet. 
     - AC/USB power alternativly Solarbattery
