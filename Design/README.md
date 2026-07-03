@@ -3,8 +3,8 @@
 - **LORA nodes**:
   - **WaterTempNode**: A LORA based device with a temp sensor is attached near the water.
     - Battery driven
-    - Two temp sensors. Both DS18B20 water proof and air proof
-    - Initially try with TTGO LORA32 but this might be too batteryhungry so if possible design based on an ATTiny (or) PIC µP
+    - One temp sensors for measuring water temp. DS18B20 water proof and air proof
+    - Initially try with ~~TTGO LORA32 but this might be too batteryhungry so if possible~~ a RAK4631 and a RAK19007 base board. Other alternatives are a design based on an ATTiny (or) PIC µP
   - **AIR&DisplayNode**: A LORA based device with temp and humidity sensor.
     - Solarpowered battery driven
     - ...
@@ -46,7 +46,8 @@ The LORA devices communicate with a JSon based protocol as payload.
 see [LORAProtocol.md](./LORAProtocol.md)
 ## WaterTempNode
 
- [Lilygo TTGO LORA32 V2.1](https://lilygo.cc/products/lora3?srsltid=AfmBOop02ZAt2DNnjyeRxOZtab0ygGJ0dLK-7sXWsq4PshTEKc9ZP_9H).
+ ~~[Lilygo TTGO LORA32 V2.1](https://lilygo.cc/products/lora3?srsltid=AfmBOop02ZAt2DNnjyeRxOZtab0ygGJ0dLK-7sXWsq4PshTEKc9ZP_9H).~~
+ [RAK4631](https://docs.rakwireless.com/product-categories/wisblock/rak4631/overview/)
 
 Features:
 - Lora capable
