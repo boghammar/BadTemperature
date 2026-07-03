@@ -1,3 +1,5 @@
+**SIMPLIFY THIS PROTOCOL**
+
 # LORA Protocol Design
 This is the protocol used by the LORA nodes. It will handle:
 - Sensor data updates
