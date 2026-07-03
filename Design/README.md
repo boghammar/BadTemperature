@@ -49,16 +49,28 @@ see [LORAProtocol.md](./LORAProtocol.md)
 ## WaterTempNode
 
  ~~[Lilygo TTGO LORA32 V2.1](https://lilygo.cc/products/lora3?srsltid=AfmBOop02ZAt2DNnjyeRxOZtab0ygGJ0dLK-7sXWsq4PshTEKc9ZP_9H).~~
+ 
  [RAK4631](https://docs.rakwireless.com/product-categories/wisblock/rak4631/overview/)
 
 Features:
-- Lora capable
+- LoRa capable
 - OneWire for the temp measurements
 - Battery powered
 - Deep sleep sending measurements every 30 minutes
+
+## AIR&DisplayNode
+
+Features:
+- LoRA capable
+- Battery powered with solar power support
+- Deep sleep sending measurements every 30 minutes
+- A paper display mounted outside that displays all data gathered by the system 
+
 
 ## LORAGateway
 
 [Heltec Wireless Stick V3](https://heltec.org/project/wireless-stick-v3/).
 
 Features:
+- WiFi gateway for all LoRa nodes talking to the backend
+- ...
